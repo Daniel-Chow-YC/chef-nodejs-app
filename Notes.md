@@ -9,13 +9,16 @@
     - Variable: CHEF_LICENSE
     - Value: accept
 
+## Chef - Create Cookbook
+Chef generate cookbook <foldername>
+
 
 # Commands
 kitchen create
-kitchen converge - will bring the machine into the VM that it is going to create
+kitchen converge - it will (destroy if up already then) spin up the VM with provisions
 kitchen Setup - gets both machines ready to test them
 kitchen Verify - will actually run the integration test but not unit tests
-kitchen test - will run commands from kitchen create to kitchen destroy and anything in between
+kitchen test - will run commands from kitchen create to kitchen destroy (but not run kitchen destroy itself) and anything in between
 kitchen Destroy
 
 # Metadata

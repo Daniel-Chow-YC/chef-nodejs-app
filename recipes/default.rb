@@ -9,9 +9,12 @@ include_recipe 'apt'
 include_recipe 'nodejs'
 
 # packages apt-get
-apt_update
+apt_update 'update resources' do
+  action :update
+end
+
 package 'nginx'
-package 'npm'
+# package 'npm'
 
 # npm installs
 nodejs_npm 'pm2'
@@ -25,6 +28,20 @@ service 'nginx' do
   action :enable
 end
 
-# node.default['nodejs']['install_method'] = 'binary'
-# node.default['nodejs']['version'] = '5.9.0'
-# node.default['nodejs']['binary']['checksum'] = '99c4136cf61761fac5ac57f80544140a3793b63e00a65d4a0e528c9db328bf40'
+# resorce template
+template '/etc/nginx/sites-available/proxy.conf' do
+  source 'proxy.conf.erb'
+  variables proxy_port: node['nginx']['proxy_port']
+  notifies :restart, 'service[nginx]'
+end
+
+# resource link
+link '/etc/nginx/sites-enabled/proxy.conf' do
+  to '/etc/nginx/sites-available/proxy.conf'
+  notifies :restart, 'service[nginx]'
+end
+
+link '/etc/nginx/sites-enabled/default' do
+  action :delete
+  notifies :restart, 'service[nginx]'
+end
