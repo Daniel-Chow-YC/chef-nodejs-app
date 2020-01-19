@@ -45,3 +45,12 @@ link '/etc/nginx/sites-enabled/default' do
   action :delete
   notifies :restart, 'service[nginx]'
 end
+
+remote_directory '/home/vagrant/app' do
+  source 'app'
+  owner 'root'
+  group 'root'
+  mode '0777'
+  recursive true
+  action :create
+end
